@@ -1,0 +1,327 @@
+#set ($pageStructure = $_XPathTool.selectSingleNode($contentRoot, "/system-data-structure"))
+
+##check for using buttons as a page component to match up with other Ponderosa styling
+#set ($page_check = $pageStructure.getChild("button-block-setup").getChild("page_container").value)
+    #if ($page_check == "Yes")
+        <div class="remainder-box normal_page component">
+    #end    
+
+##set up optional button block id and height equaliezer
+#set ($btn_block_id = "")
+#set ($btn_block_id = $pageStructure.getChild("button-block-setup").getChild("btn-block-id").text)
+
+#set ($height_check = $pageStructure.getChild("button-block-setup").getChild("height_eq_ctrl").value)
+
+##build opening block wrapper div
+    #if ($btn_block_id != "")
+        <div id="$btn_block_id" class="row-fluid separatedButtons">
+    #else 
+        <div class="row-fluid separatedButtons">
+    #end
+
+##set up block heading, the $pageHeading variable is a carryover from when the Button Block was originally created as a page type element.
+    #set ($pageHeading = $pageStructure.getChild("page_heading").text)
+    #if ($pageHeading != "")
+        <div class="row-fluid blockHeading">
+            <h2>$pageHeading</h2>
+        </div>    
+    #end
+    
+##above buttons
+    #set ($above_content = "")
+    #set ($above_content = $_SerializerTool.serialize($pageStructure.getChild("advanced").getChild("above_content"), true))
+    #if ($above_content != "<above_content />")
+        <div class="row-fluid above_buttons">
+            $above_content
+        </div>
+    #end
+
+##start button wrapper
+    <div class="row-fluid button_groups">
+        
+## start setting up groups of buttons
+        #set ($group_count = 0)
+
+        #set($buttonGroups = $_XPathTool.selectNodes($pageStructure, "button_group"))
+        
+##start button groups loop
+        #foreach ($button_group in $buttonGroups)
+            #set ($group_count = $group_count+1)
+            #set ($row_class = "row$group_count")
+       
+            #set ($count = 0)
+            #set ($buttons = $_XPathTool.selectNodes($button_group, "button"))
+            
+            #set ($button_group_class = "")
+            
+            #set ($button_group_class = $button_group.getChild("btn-group-setup").getChild("btn-group-class").text)
+               
+            #set ($btnLayout = $button_group.getChild("btn-group-setup").getChild("btn_layout").value)
+            
+            #set ($override = $button_group.getChild("btn-group-setup").getChild("layoutOverrideCheck").value)
+            
+            #set ($height_check_row = $button_group.getChild("btn-group-setup").getChild("height_eq_row").value)
+            
+            #foreach ($button in $buttons)
+                #set($count = $count+1)
+            #end
+            
+            #set ($btn_count = "btn-count-$count")
+
+##start button row
+            <div class="row-fluid button_row featured_site_links $row_class $button_group_class">
+##button group heading            
+                #set ($button_group_heading = "")
+                #set ($button_group_heading = $button_group.getChild("btn_group_heading").text)
+                #if ($button_group_heading != "")
+                    <div class="row-fluid btn-group-heading">
+                        <h2>$button_group_heading</h2>
+                    </div>
+                #end    
+
+##layout logic
+                #set ($offset = "")    
+                
+                #if ($btnLayout == "Fill Content Area")
+                    #if ($count == 1)
+                        #set ($button_class_base = " span12")
+                    #elseif ($count == 2)
+                        #set ($button_class_base = " span6")
+                    #elseif ($count == 3)
+                        #set ($button_class_base = " span4")
+                    #elseif ($count == 4)
+                        #set ($button_class_base = " span3")
+                    #elseif ($count == 5)
+                        #set ($button_class_base = " span2")
+                        #set ($offset = " offset1")
+                    #else 
+                        #set ($button_class_base = " span2")
+                    #end        
+                #elseif ($btnLayout == "Fixed Button Width Centered")
+                    #set ($button_class_base = " span2")
+                    #if ($count == 1)
+                        #set ($offset = " offset5")
+                    #elseif ($count == 2)
+                        #set ($offset = " offset4")
+                    #elseif ($count == 3)
+                        #set ($offset = " offset3")
+                    #elseif ($count == 4)
+                        #set ($offset = " offset2")
+                    #elseif ($count == 5)
+                        #set ($offset = " offset1")                        
+                    #end
+                #end    
+##individual button loop                
+                #foreach ($button in $buttons)
+                    #set ($cust_button_class = "")
+                    #set ($cust_button_class = $button.getChild("btn-class").text)
+                    
+                    #if ($foreach.index == 0)
+                        #set ($button_class = $button_class_base + $offset)
+                    #else
+                        #set ($button_class = $button_class_base)
+                    #end
+##custom layout selector setup                    
+                    #if ($btnLayout == "Custom Layout")
+                        #set ($button_layout_override = "")
+                        #set ($button_layout_override = $button.getChild("advanced-layout").getChild("layout_override").value)
+                            #if ($button_layout_override == 1)
+                                #set ($button_class = "span1")
+                            #elseif ($button_layout_override == 2)
+                                #set ($button_class = "span2")
+                            #elseif ($button_layout_override == 3)
+                                #set ($button_class = "span3")
+                            #elseif ($button_layout_override == 4)
+                                #set ($button_class = "span4")
+                            #elseif ($button_layout_override == 5)
+                                #set ($button_class = "span5")
+                            #elseif ($button_layout_override == 6)
+                                #set ($button_class = "span6")
+                            #elseif ($button_layout_override == 7)
+                                #set ($button_class = "span7")
+                            #elseif ($button_layout_override == 8)
+                                #set ($button_class = "span8")
+                            #elseif ($button_layout_override == 9)
+                                #set ($button_class = "span9")
+                            #elseif ($button_layout_override == 10)
+                                #set ($button_class = "span10")
+                            #elseif ($button_layout_override == 11)
+                                #set ($button_class = "span11")
+                            #elseif ($button_layout_override == 12)
+                                #set ($button_class = "span12")    
+                            #else    
+                                #set ($button_class = "$button_layout_override")
+                            #end    
+                    #end
+##initialize button variables                    
+                    #set ($grad_btn = "")
+                    #set ($img_btn = "")
+                    #set ($btn_text = "")
+                    #set ($btn_render_check = $button.getChild("advanced-layout").getChild("btn_render_check").value)
+                        #if ($btn_render_check == "Image Button" || $btn_render_check == "Gradient ButtonImage Button" || $btn_render_check == "Content ButtonImage Button" || $btn_render_check == "Gradient ButtonContent ButtonImage Button")
+                            #set ($img_btn = "img-btn")
+                        #end    
+                        #if ($btn_render_check == "Gradient Button" || $btn_render_check == "Gradient ButtonContent Button" || $btn_render_check == "Gradient ButtonImage Button" || $btn_render_check == "Gradient ButtonContent ButtonImage Button")
+                            #set ($grad_color = "")
+                            #set ($grad_color = $button.getChild("advanced-layout").getChild("grad_btn_options").value)
+                            #set ($grad_btn = "grad_button featurebutton_$grad_color") 
+                        #end
+                        
+                    #set ($label = "")
+                    #set ($image = "")
+                    #set ($img_alt = "")
+                    #set ($link = "")
+                    #set ($extLink = "")
+                    #set ($label = $button.getChild("button_label").text) 
+                    #set ($image = $_SerializerTool.serialize($button.getChild("background_image").getChild("path"), true))
+                    #set ($link = $_SerializerTool.serialize($button.getChild("internal_link").getChild("path"), true))
+                    
+                    #set ($alt_text_check = $button.getChild("img_type").value)
+                        #if ($alt_text_check == "Functional/Logo")
+                            #set ($img_alt = "$label")
+                        #elseif ($alt_text_check == "Contextual")
+                            #set ($img_alt = $button.getChild("img_alt").text)
+                        #end    
+                    
+                    #if ($link == "/")
+                        #set ($extLink = $button.getChild("external_link").text)
+                    #end
+
+#*  This information is for a legacy function to not display an image if alt text was not entered. Updates to contextual alt text aliviate the need for this snippet but left here as a reference only.                  
+                    #if($image != "" && $image != "/" && $img_alt == "")
+                        [system-view:internal]<div style="margin-bottom: 0px" class="alert alert-error">The button image ($image) will not display when published because no alt tag was provided.</div>[/system-view:internal]
+                    #end
+*#
+
+##start building individual button
+                    <div class="featured_link $button_class $btn_count $img_btn">
+##button with image and label                    
+                        #if($image != "/" && $image != "" && $img_alt != "" && $label != "")
+                            #if($extLink != "")
+                                <a href="${_EscapeTool.xml($extLink)}" target="_blank" class="btn $grad_btn $img_btn $cust_button_class" style="display: block; white-space:normal;">
+                            #elseif($extLink == "" && $link == "/")
+                                <a href="" class="btn $grad_btn $img_btn $cust_button_class" style="white-space:normal; display:block;">
+                            #elseif($link != "")        
+                                <a href="$link" class="btn $grad_btn $img_btn $cust_button_class" style="white-space:normal; display:block;">
+                            #end        
+                                #if ($height_check == "Yes" || $height_check == "Exclude Require jQuery" || $height_check_row == "Yes")
+                                    <div class="row-fluid btn-content height-eq">
+                                #else
+                                    <div class="row-fluid btn-content">
+                                #end    
+                                    <span class="row-fluid">
+                                        <img src="[system-asset]${image}[/system-asset]" alt="$img_alt" />
+                                    </span>    
+                                    <span class="image_label feature_title row-fluid">
+                                        <h3>$label</h3>
+                                    </span>
+                                    #if ($btn_render_check == "Content Button" || $btn_render_check == "Gradient ButtonContent Button" || $btn_render_check == "Content ButtonImage Button" || $btn_render_check == "Gradient ButtonContent ButtonImage Button")
+                                        #set ($btn_text = "")
+                                        #set ($btn_text = $button.getChild("advanced-layout").getChild("btn-content").text)
+                                        #if ($btn_text != "")
+                                        <span class="row-fluid">
+                                            <p class="btn-text">${_EscapeTool.xml($btn_text)}</p>
+                                        </span>    
+                                        #end
+                                    #end
+                                    </div>
+                                </a>
+##button with image only                                
+                        #elseif($image != "/" && $image != "" && $img_alt != "" && $label == "")
+                            #if($extLink != "")
+                                <a href="${_EscapeTool.xml($extLink)}" target="_blank" class="btn $grad_btn $img_btn $cust_button_class" style="display:block; white-space:normal;">
+                            #elseif($extLink == "" && $link == "/")
+                                <a href="" class="btn $grad_btn $img_btn $cust_button_class" style="white-space:normal; display:block;">
+                            #elseif($link != "/")       
+                                <a href="$link" class="btn $grad_btn $img_btn $cust_button_class" style="white-space:normal; display:block;">
+                            #end
+                                #if ($height_check == "Yes" || $height_check == "Exclude Require jQuery" || $height_check_row == "Yes")
+                                    <div class="row-fluid btn-content height-eq">
+                                #else
+                                    <div class="row-fluid btn-content">
+                                #end 
+                                    <span class="row-fluid">
+                                        <img src="[system-asset]${image}[/system-asset]" alt="$img_alt" />
+                                    </span>    
+                                    #if ($btn_render_check == "Content Button" || $btn_render_check == "Gradient ButtonContent Button" || $btn_render_check == "Content ButtonImage Button" || $btn_render_check == "Gradient ButtonContent ButtonImage Button")
+                                        #set ($btn_text = "")
+                                        #set ($btn_text = $button.getChild("advanced-layout").getChild("btn-content").text)
+                                        #if ($btn_text != "")
+                                        <span class="row-fluid">
+                                            <p class="btn-text">${_EscapeTool.xml($btn_text)}</p>
+                                        </span>    
+                                        #end
+                                    #end
+                                    </div>
+                                </a>
+##button with label only                                
+                        #elseif($image == "/" && $label != "")
+                            #if($extLink != "")
+                                <a href="${_EscapeTool.xml($extLink)}" target="_blank" class="btn $grad_btn $cust_button_class" style="display:block; white-space:normal;">                           
+                            #elseif($extLink == "" && $link == "/")
+                                <a href="" class="btn $grad_btn $cust_button_class" style="white-space:normal; display:block;">
+                            #elseif($link != "/")        
+                                <a href="$link" class="btn $grad_btn $cust_button_class" style="white-space:normal; display:block;">
+                            #end
+                                #if ($height_check == "Yes" || $height_check == "Exclude Require jQuery" || $height_check_row == "Yes")
+                                    <div class="row-fluid btn-content height-eq">
+                                #else
+                                    <div class="row-fluid btn-content">
+                                #end 
+                                    <span class="button-label feature_title row-fluid">
+                                        <h3>$label</h3>
+                                    </span>
+                                    #if ($btn_render_check == "Content Button" || $btn_render_check == "Gradient ButtonContent Button" || $btn_render_check == "Content ButtonImage Button" || $btn_render_check == "Gradient ButtonContent ButtonImage Button")
+                                        #set ($btn_text = "")
+                                        #set ($btn_text = $button.getChild("advanced-layout").getChild("btn-content").text)
+                                        #if ($btn_text != "")
+                                        <span class="row-fluid">
+                                            <p class="btn-text">${_EscapeTool.xml($btn_text)}</p>
+                                        </span>    
+                                        #end
+                                    #end
+                                    </div>
+                                </a>    
+                        #end
+                    </div> ##close button
+                #end ##forech buttons
+            </div> ##button_row
+        #end ##forech button group
+    </div> ##button_groups
+
+##below buttons
+    #set ($below_content = "")
+    #set ($below_content = $_SerializerTool.serialize($pageStructure.getChild("advanced").getChild("below_content"), true))
+    #if ($below_content != "<below_content />")
+        <div class="row-fluid below_buttons">
+            $below_content
+        </div>
+    #end
+
+</div> ##separated_buttons  
+
+##ends optional page container div
+#if ($page_check == "Yes")
+    </div>
+#end
+
+##connect to ponderosa height equalizer
+##excludes the require line
+#if ($height_check == "Exclude Require jQuery")
+    <script type="text/javascript">
+        jQuery(document).ready(function($){
+                height_equalizer.equalize(".height-eq");
+            });
+    </script>    
+#elseif ($height_check == "No")
+    ##does nothing
+##for manual or automatic connections
+#else
+    <script type="text/javascript">
+        require(["jquery", "height_equalizer"],function(jQuery,height_equalizer){
+            jQuery(document).ready(function($){
+                height_equalizer.equalize(".height-eq");
+            });
+        });
+    </script>    
+#end
