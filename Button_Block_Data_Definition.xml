@@ -1,0 +1,81 @@
+<system-data-structure>
+    <text identifier="page_heading" label="Block Heading" help-text="Heading for entire Button Block, rendered as H2"/>
+    <group identifier="button_group" label="Button Group" multiple="true">
+        <text identifier="btn_group_heading" label="Group Heading" help-text="Heading for a group of buttons, rendered as H2"/>
+        <group identifier="button" label="Button" multiple="true" maximum-number="6">
+            <text identifier="button_label" label="Button Label" help-text="This is the title of the link, formatted as a Heading Level 3 (H3). You may include inline HTML elements like the break tag. If you need to use a special character like the ampersand, use the HTML code to display the special character"/>
+            <asset type="page" identifier="internal_link" label="Internal Link" help-text="Click search to browse to the page on the site to link to."/>
+            <text identifier="external_link" label="-or- External Link" help-text="Type specific url here, include http://"/>
+            <asset type="file" identifier="background_image" label="Button Image" help-text="Broswe for an image to attach to the button. For sizing purposes make sure your buttons are either the same size or same aspect ratio."/>
+            <text type="radiobutton" identifier="img_type" label="Type of Image" default="Contextual" required="true" help-text="Select what type of image you have connected. Functional/Logo inserts the 'Button Label' as the alt text. Conetexual allows you to add a custom alt description.">
+                <radio-item value="Functional/Logo"/>
+                <radio-item value="Contextual" show-fields="button_group/button/img_alt"/>
+            </text>
+            <text identifier="img_alt" label="Image Alt Text" required="true" help-text="Add your Contextual alt text here."/>
+            <text identifier="btn-class" label="Custom Button Class" help-text="Add a class to the button. This custom class is passed to the 'a' tag of the markup structure. Multiple classes can be added using spaces to separate the class names."/>
+            <group identifier="advanced-layout" label="Advanced Button Setup" collapsed="true">
+                <text type="checkbox" identifier="btn_render_check" label="Render As" help-text="Selects how the button will render on a page. Gradient buttons follow same styling as Featured Links buttons from the Setup Block. Content buttons add a short paragraph of text to the button. Image button helps to style buttons where the image is used as the button link. ">
+                    <checkbox-item value="Gradient Button" show-fields="button_group/button/advanced-layout/grad_btn_options"/>
+                    <checkbox-item value="Content Button" show-fields="button_group/button/advanced-layout/btn-content"/>
+                    <checkbox-item value="Image Button"/>
+                </text>
+                <text type="dropdown" identifier="grad_btn_options" label="Gradient Button Options" help-text="These color styles follow the 'Featured Links' style of buttons on the Ponderosa Template Setup Block.">
+                    <dropdown-item value="black"/>
+                    <dropdown-item value="blue"/>
+                    <dropdown-item value="brown"/>
+                    <dropdown-item value="cream"/>
+                    <dropdown-item value="dark_gray"/>
+                    <dropdown-item value="green"/>
+                    <dropdown-item value="maroon"/>
+                    <dropdown-item value="orange"/>
+                    <dropdown-item value="purple"/>
+                    <dropdown-item value="red"/>
+                    <dropdown-item value="silver"/>
+                    <dropdown-item value="teal"/>
+                </text>
+                <text multi-line="true" identifier="btn-content" label="Button Content Text" help-text="Use this area to include a very short paragraph of text on the button. Automatically wrapped as a Paragraph."/>
+                <text type="dropdown" identifier="layout_override" label="Custom Layout" help-text="Use this line to select the span number for the button (Bootstrap v2 by default).      If you are using offsets you will need to rewrite the span class with the offset. Ex: span3 offset3.     For Bootstrap 3 classes write the combinations of different classes.     You may also write custom classes here in addition to Bootstrap column classes. Buttons may not work properly if column classes are not used in this field.     Make sure all button widths in a group add to 12. " allow-custom-values="true">
+                    <dropdown-item value="1"/>
+                    <dropdown-item value="2"/>
+                    <dropdown-item value="3"/>
+                    <dropdown-item value="4"/>
+                    <dropdown-item value="5"/>
+                    <dropdown-item value="6"/>
+                    <dropdown-item value="7"/>
+                    <dropdown-item value="8"/>
+                    <dropdown-item value="9"/>
+                    <dropdown-item value="10"/>
+                    <dropdown-item value="11"/>
+                    <dropdown-item value="12"/>
+                </text>
+            </group>
+        </group>
+        <group identifier="btn-group-setup" label="Button Group Setup" collapsed="true">
+            <text type="radiobutton" identifier="btn_layout" label="Button Layout" default="Fixed Button Width Centered" help-text="     Fill Content Area: This makes each button the largest possible column width to reach the width of the parent element.     Fixed Button Width Centered: This makes each button the same width and centers the button in the parent element. The markup here is fixed to span2 with appropriate offsets to center the buttons.     Custom Layout: This selector enables the Custom Layout tool. This selector gives total freedom of the block on a per group basis if you wish to use non-uniform button widths on a row. If you use this feature the Layout Overrides section on each button will be active allowing for a selection of any column width of each button (Bootstrap 2 Spans by default).">
+                <radio-item value="Fill Content Area"/>
+                <radio-item value="Fixed Button Width Centered"/>
+                <radio-item value="Custom Layout" show-fields="button_group/button/advanced-layout/layout_override"/>
+            </text>
+            <text type="checkbox" identifier="height_eq_row" label="Height Equalize Row" help-text="Select this to include or exclude the row from the height equalizer.">
+                <checkbox-item value="Yes"/>
+            </text>
+            <text identifier="btn-group-class" label="Custom Button Group Class" help-text="This is passed to the same div as the row, so you don't have to modify Bootstrap default behavior."/>
+        </group>
+    </group>
+    <group identifier="advanced" label="Additional Content" collapsed="true">
+        <text wysiwyg="true" identifier="above_content" label="Above Button Content" help-text="Adds custom content above the buttons"/>
+        <text wysiwyg="true" identifier="below_content" label="Below Button Content" help-text="Adds custom content below the buttons"/>
+    </group>
+    <group identifier="button-block-setup" label="Button Block Setup" collapsed="true">
+        <text identifier="btn-block-id" label="Custom Block ID" help-text="Use an ID regardless if you are only using a single button block on a site. The will insure that any custom styling from the first instance will not affect any future instances."/>
+        <text type="radiobutton" identifier="height_eq_ctrl" label="Height Equalizer" default="Yes" help-text="Use the radio buttons to connect or disconnect to the Ponderosa Height Equalizer. Yes: The Height Equalizer makes all buttons in all groups the same height and is enabled by default. Manual: This allows for more control of connecting to the Height Equalizer. When this mode is active a check box will appear in the Button Group Setup section for each row. Check the box to height equalize the buttons on that row. If multiple rows are being height equalized, buttons will equalize to the tallest overall button on the selected rows. No: Selecting 'No' will not connect the buttons to the Height Equalizer. Tip: If you are building non gradient, image buttons you will need to select 'No'.     Exclude Require jQuery: Select this option if you are connecting the Button Block to a page that is already using another block element that connects to the Height Equalizer, like Tiles. ">
+            <radio-item value="Yes"/>
+            <radio-item value="Manual" show-fields="button_group/btn-group-setup/height_eq_row"/>
+            <radio-item value="No"/>
+            <radio-item value="Exclude Require jQuery"/>
+        </text>
+        <text type="checkbox" identifier="page_container" label="Include Page Container" help-text="Use this check box to place the buttons and optional additional content in a container div to match native page content on the Ponderosa Template. Although this may be a rarely needed feature, it will save you plenty of time troubleshooting css.">
+            <checkbox-item value="Yes" checked="true"/>
+        </text>
+    </group>
+</system-data-structure>
